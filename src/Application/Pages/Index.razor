@@ -1,9 +1,27 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<RadzenSplitButton Click=@OnClick Text="Select Text Editor" Icon="account_circle">
+    <ChildContent>
+        <RadzenSplitButtonItem Text="Radzen" Value="1" />
+        <RadzenSplitButtonItem Text="Quill" Value="2"  />
+    </ChildContent>
+</RadzenSplitButton>
+@if (componentToShow == "1")
+{
+    <RadzenEditor />
+}
+@if (componentToShow == "2")
+{
+    
+}
 
-Welcome to your new app.
+@code {
+    string componentToShow = "0";
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    void OnClick(RadzenSplitButtonItem item)
+    {
+        componentToShow = item.Value;
+    }
+}

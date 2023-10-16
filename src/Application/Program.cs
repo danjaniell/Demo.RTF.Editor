@@ -1,15 +1,13 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using WkHtmlToPdfDotNet.Contracts;
 using WkHtmlToPdfDotNet;
 using Application.Services;
-using Application.Services.Interface;
 using Application.Services.Strategies;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Blazorise.RichTextEdit;
+using Sitko.Blazor.CKEditor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +23,15 @@ builder.Services
     .AddFontAwesomeIcons()
     .AddBlazoriseRichTextEdit();
 
+builder.Services.AddCKEditor(
+    builder.Configuration,
+    options =>
+    {
+        // options.ScriptPath = "https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js";
+        options.ScriptPath = "js/ckeditor.js";
+        options.EditorClassName = "ClassicEditor";
+    }
+);
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();

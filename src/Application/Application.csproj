@@ -14,6 +14,8 @@
     <PackageReference Include="Haukcode.WkHtmlToPdfDotNet" Version="1.5.86" />
     <PackageReference Include="Radzen.Blazor" Version="4.17.1" />
     <PackageReference Include="PhantomJs.NetCore" Version="1.0.1" />
+    <PackageReference Include="Sitko.Blazor.CKEditor" Version="3.0.3" />
+    <PackageReference Include="Sitko.Blazor.CKEditor.Bundle" Version="3.0.3" />
   </ItemGroup>
 
 </Project>

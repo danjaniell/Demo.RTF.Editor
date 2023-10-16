@@ -2,6 +2,7 @@
 
 <RadzenCard>
     @* <FontSelector FontSelected="@HandleFontSelected" /> *@
+    <PdfConversion HtmlValue="@htmlValue"/>
     <RichTextEdit @ref="richTextEditRef"
                   Theme="RichTextEditTheme.Snow"
                   ContentChanged="@OnContentChanged"
@@ -46,9 +47,6 @@
             <RichTextEditToolbarButton Action="RichTextEditAction.Link" />
             <RichTextEditToolbarButton Action="RichTextEditAction.Image" />
         </RichTextEditToolbarGroup>
-            <RichTextEditToolbarGroup Float="Float.End">
-                <Button Clicked="@DownloadAsPdf"><Icon Name="IconName.FilePdf" /></Button>
-            </RichTextEditToolbarGroup>
         </Toolbar>
     </RichTextEdit>
 </RadzenCard>
@@ -75,11 +73,5 @@
     public async Task OnContentChanged()
     {
         htmlValue = await richTextEditRef.GetHtmlAsync();
-    }
-
-    public async Task DownloadAsPdf()
-    {
-        pdfDataUri = _pdfConverter.GeneratePdfFromHtml(htmlValue);
-        await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{pdfDataUri}`, `_blank`)");
     }
 }

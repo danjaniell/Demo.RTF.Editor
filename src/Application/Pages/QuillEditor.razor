@@ -3,7 +3,7 @@
 @if (EditorEnabled)
 {
     <RadzenCard>
-        <RadzenButton Click=@(() => DownloadAsPdf()) Text="Download PDF" />
+        <PdfConversion HtmlValue="@htmlValue"/>
         <div id="toolbar" @ref="@divEditorElement">
             <span class="ql-formats">
                 <select class="ql-size">
@@ -39,6 +39,7 @@
                 <button class="ql-link"></button>
             </span>
         </div>
+        <RadzenButton Click=@(() => Save()) Text="Save" />
     </RadzenCard>
 }
 @code {
@@ -56,12 +57,10 @@
         }
     }
 
-    private async Task DownloadAsPdf()
+    private async Task Save()
     {
         htmlValue = await JSRuntime.InvokeAsync<string>(
             "QuillFunctions.getQuillHTML", divEditorElement);
-        pdfDataUri = _pdfConverter.GeneratePdfFromHtml(htmlValue);
-        await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{pdfDataUri}`, `_blank`)");
     }
 }
 

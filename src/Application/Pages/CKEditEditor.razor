@@ -3,17 +3,11 @@
 @using Sitko.Blazor.CKEditor.Bundle
 
 <RadzenCard>
-    <RadzenButton Click=@(() => DownloadAsPdf()) Text="Download PDF" />
+    <PdfConversion HtmlValue="@htmlValue"/>
     <CKEditor @bind-Value="@htmlValue" />
 </RadzenCard>
 
 @code {
     private string htmlValue = "<h1>Hello World!!!</h1>";
     private string pdfDataUri;
-
-    private async Task DownloadAsPdf()
-    {
-        pdfDataUri = _pdfConverter.GeneratePdfFromHtml(htmlValue);
-        await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{pdfDataUri}`, `_blank`)");
-    }
 }

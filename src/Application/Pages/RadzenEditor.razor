@@ -1,17 +1,10 @@
 @page "/radzen-editor"
 
 <RadzenCard>
-    <RadzenButton Click=@(() => DownloadAsPdf()) Text="Download PDF" />
+    <PdfConversion HtmlValue="@htmlValue"/>
     <RadzenHtmlEditor @bind-Value=@htmlValue UploadUrl="upload/image" />
 </RadzenCard>
 
 @code {
     private string htmlValue = "<h1>Hello World!!!</h1>";
-    private string pdfDataUri;
-
-    private async Task DownloadAsPdf()
-    {
-        pdfDataUri = _pdfConverter.GeneratePdfFromHtml(htmlValue);
-        await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{pdfDataUri}`, `_blank`)");
-    }
 }

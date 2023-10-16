@@ -39,7 +39,8 @@
 
           [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
           [{ 'font': fontNames }],
-          [{ 'align': [] }],
+          [{ 'align': ['center', 'right', 'justify'] }],
+          ['link'],
 
           ['clean']                                         // remove formatting button
       ];
@@ -53,8 +54,21 @@
           modules: {
               toolbar: toolbarOptions
           },
-          theme: 'snow'
+          theme: 'snow',
+          placeholder: 'Enter text here...'
+      });
+
+      quill.on('text-change', function () {
+        window.Blazor.updateHtmlValue(quill.root.innerHTML);
       });
     }
+  };
+
+  window.registerUpdateHtmlValueFunction = function (dotnetHelper) {
+    window.Blazor = {
+      updateHtmlValue: function (htmlValue) {
+        dotnetHelper.invokeMethodAsync('UpdateHtmlValue', htmlValue);
+      }
+    };
   };
 })();

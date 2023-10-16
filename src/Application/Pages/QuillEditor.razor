@@ -1,50 +1,16 @@
 @page "/quill-editor"
+@inject IJSRuntime JSRuntime
 
 @if (EditorEnabled)
 {
     <RadzenCard>
         <PdfConversion HtmlValue="@htmlValue"/>
-        <div id="toolbar" @ref="@divEditorElement">
-            <span class="ql-formats">
-                <select class="ql-size">
-                    <option value="small"></option>
-                    <option selected=""></option>
-                    <option value="large"></option>
-                    <option value="huge"></option>
-                </select>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-bold"></button>
-                <button class="ql-italic"></button>
-                <button class="ql-underline"></button>
-                <button class="ql-strike"></button>
-            </span>
-            <span class="ql-formats">
-                <select class="ql-color"></select>
-                <select class="ql-background"></select>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-list" value="ordered"></button>
-                <button class="ql-list" value="bullet"></button>
-                <button class="ql-indent" value="-1"></button>
-                <button class="ql-indent" value="+1"></button>
-                <select class="ql-align">
-                    <option selected=""></option>
-                    <option value="center"></option>
-                    <option value="right"></option>
-                    <option value="justify"></option>
-                </select>
-            </span>
-            <span class="ql-formats">
-                <button class="ql-link"></button>
-            </span>
-        </div>
-        <RadzenButton Click=@(() => Save()) Text="Save" />
+        <div id="toolbar" @ref="@divEditorElement"></div>
     </RadzenCard>
 }
+
 @code {
     private string htmlValue = "<h1>Hello World!!!</h1>";
-    private string pdfDataUri;
     private ElementReference divEditorElement;
     private bool EditorEnabled = true;
 
@@ -52,16 +18,21 @@
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeAsync<string>(
-                "QuillFunctions.createQuill", divEditorElement);
+            await JSRuntime.InvokeVoidAsync("QuillFunctions.createQuill", divEditorElement);
         }
     }
 
-    private async Task Save()
+    protected override void OnInitialized()
     {
-        htmlValue = await JSRuntime.InvokeAsync<string>(
-            "QuillFunctions.getQuillHTML", divEditorElement);
+        base.OnInitialized();
+
+        JSRuntime.InvokeVoidAsync("registerUpdateHtmlValueFunction", DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public void UpdateHtmlValue(string newValue)
+    {
+        htmlValue = newValue;
+        StateHasChanged();
     }
 }
-
-

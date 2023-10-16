@@ -1,0 +1,72 @@
+@page "/quill-editor"
+
+@using Application.Services
+@inject IJSRuntime JSRuntime
+@inject PdfService _pdfService
+
+@if (EditorEnabled)
+{
+    <RadzenCard>
+        <RadzenButton Click=@(() => DownloadAsPdf()) Text="Download PDF" />
+        <div id="toolbar" @ref="@divEditorElement">
+            <span class="ql-formats">
+                <select class="ql-size">
+                    <option value="small"></option>
+                    <option selected=""></option>
+                    <option value="large"></option>
+                    <option value="huge"></option>
+                </select>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+            </span>
+            <span class="ql-formats">
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+                <button class="ql-indent" value="-1"></button>
+                <button class="ql-indent" value="+1"></button>
+                <select class="ql-align">
+                    <option selected=""></option>
+                    <option value="center"></option>
+                    <option value="right"></option>
+                    <option value="justify"></option>
+                </select>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-link"></button>
+            </span>
+        </div>
+    </RadzenCard>
+}
+@code {
+    private string htmlValue = "<h1>Hello World!!!</h1>";
+    private string pdfDataUri;
+    private ElementReference divEditorElement;
+    private bool EditorEnabled = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<string>(
+                "QuillFunctions.createQuill", divEditorElement);
+        }
+    }
+
+    private async Task DownloadAsPdf()
+    {
+        htmlValue = await JSRuntime.InvokeAsync<string>(
+            "QuillFunctions.getQuillHTML", divEditorElement);
+        pdfDataUri = _pdfService.GeneratePdfFromHtml(htmlValue);
+        await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{pdfDataUri}`, `_blank`)");
+    }
+}
+
+

@@ -7,6 +7,7 @@
     <ChildContent>
         <RadzenSplitButtonItem Text="Radzen" Value="1" />
         <RadzenSplitButtonItem Text="BlazoriseQuill" Value="2" />
+        <RadzenSplitButtonItem Text="Quill" Value="3" />
     </ChildContent>
 </RadzenSplitButton>
 @if (componentToShow == "1")
@@ -16,6 +17,10 @@
 @if (componentToShow == "2")
 {
     <BlazoriseEditor />
+}
+@if (componentToShow == "3")
+{
+    <QuillEditor />
 }
 
 @code {

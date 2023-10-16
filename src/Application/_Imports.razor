@@ -12,3 +12,8 @@
 @using Radzen.Blazor
 @using Blazorise
 @using Blazorise.RichTextEdit
+@using Application.Services
+@using Application.Services.Strategies
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@inject PdfConverter<WkHtmlToPdfConversionStrategy> _pdfConverter

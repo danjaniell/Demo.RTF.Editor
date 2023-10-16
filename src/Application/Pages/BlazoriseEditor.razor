@@ -1,12 +1,5 @@
 @page "/blazorise-editor"
 
-@using Application.Services
-@using Application.Services.Strategies
-@using Application.Pages
-@inject NavigationManager Navigation
-@inject PdfConverter<WkHtmlToPdfConversionStrategy> _pdfConverter
-@inject IJSRuntime JSRuntime
-
 <RadzenCard>
     @* <FontSelector FontSelected="@HandleFontSelected" /> *@
     <RichTextEdit @ref="richTextEditRef"

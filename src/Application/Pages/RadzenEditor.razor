@@ -1,11 +1,5 @@
 @page "/radzen-editor"
 
-@using Application.Services
-@using Application.Services.Strategies
-@inject NavigationManager Navigation
-@inject PdfConverter<WkHtmlToPdfConversionStrategy> _pdfConverter
-@inject IJSRuntime JSRuntime
-
 <RadzenCard>
     <RadzenButton Click=@(() => DownloadAsPdf()) Text="Download PDF" />
     <RadzenHtmlEditor @bind-Value=@htmlValue UploadUrl="upload/image" />

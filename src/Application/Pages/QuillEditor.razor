@@ -1,10 +1,5 @@
 @page "/quill-editor"
 
-@using Application.Services
-@using Application.Services.Strategies
-@inject IJSRuntime JSRuntime
-@inject PdfConverter<WkHtmlToPdfConversionStrategy> _pdfConverter
-
 @if (EditorEnabled)
 {
     <RadzenCard>

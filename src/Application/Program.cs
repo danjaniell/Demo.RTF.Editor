@@ -5,12 +5,24 @@ using Radzen;
 using WkHtmlToPdfDotNet.Contracts;
 using WkHtmlToPdfDotNet;
 using Application.Services;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
+using Blazorise.RichTextEdit;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services
+    .AddBlazorise(options =>
+    {
+        options.Immediate = true;
+    })
+    .AddBootstrapProviders()
+    .AddFontAwesomeIcons()
+    .AddBlazoriseRichTextEdit();
 
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<DialogService>();

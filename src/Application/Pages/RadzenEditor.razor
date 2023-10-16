@@ -5,6 +5,7 @@
 @using WkHtmlToPdfDotNet.Contracts
 @inject NavigationManager Navigation
 @inject PdfService _pdfService
+@inject IJSRuntime JSRuntime
 
 <RadzenCard>
     <RadzenButton Click=@(() => DownloadAsPdf()) Text="Download PDF" />
@@ -15,9 +16,9 @@
     private string htmlValue = "<h1>Hello World!!!</h1>";
     private string pdfDataUri;
 
-    private void DownloadAsPdf()
+    private async Task DownloadAsPdf()
     {
         pdfDataUri = _pdfService.GeneratePdfFromHtml(htmlValue);
-        Navigation.NavigateTo(pdfDataUri);
+        await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{pdfDataUri}`, `_blank`)");
     }
 }

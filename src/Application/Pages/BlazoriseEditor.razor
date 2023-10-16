@@ -1,0 +1,91 @@
+@page "/blazorise-editor"
+
+@using Application.Services
+@using Application.Pages
+@inject NavigationManager Navigation
+@inject PdfService _pdfService
+@inject IJSRuntime JSRuntime
+
+<RadzenCard>
+    @* <FontSelector FontSelected="@HandleFontSelected" /> *@
+    <RichTextEdit @ref="richTextEditRef"
+                  Theme="RichTextEditTheme.Snow"
+                  ContentChanged="@OnContentChanged"
+                  PlaceHolder="Type text here..."
+                  ReadOnly="@readOnly"
+                  SubmitOnEnter="false"
+                  ToolbarPosition="Placement.Bottom"
+                  >
+        <Editor><h1>Hello World!!!</h1></Editor>
+        <Toolbar>
+        <RichTextEditToolbarGroup>
+            <RichTextEditToolbarButton Action="RichTextEditAction.Bold" />
+            <RichTextEditToolbarButton Action="RichTextEditAction.Italic" />
+            <RichTextEditToolbarButton Action="RichTextEditAction.Underline" />
+            <RichTextEditToolbarButton Action="RichTextEditAction.Strike" />
+        </RichTextEditToolbarGroup>
+        <RichTextEditToolbarGroup>
+            <RichTextEditToolbarSelect Action="RichTextEditAction.Size">
+                <RichTextEditToolbarSelectItem Value="small" />
+                <RichTextEditToolbarSelectItem Selected />
+                <RichTextEditToolbarSelectItem Value="large" />
+                <RichTextEditToolbarSelectItem Value="huge">Very Big</RichTextEditToolbarSelectItem>
+            </RichTextEditToolbarSelect>
+        </RichTextEditToolbarGroup>
+        <RichTextEditToolbarGroup>
+            <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="ordered" />
+            <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="bullet" />
+        </RichTextEditToolbarGroup>
+        <RichTextEditToolbarGroup>
+            <RichTextEditToolbarButton Action="RichTextEditAction.Blockquote" />
+            <RichTextEditToolbarButton Action="RichTextEditAction.CodeBlock" />
+        </RichTextEditToolbarGroup>
+        <RichTextEditToolbarGroup>
+            <RichTextEditToolbarButton Action="RichTextEditAction.Script" Value="sub" />
+            <RichTextEditToolbarButton Action="RichTextEditAction.Script" Value="super" />
+        </RichTextEditToolbarGroup>
+        <RichTextEditToolbarGroup>
+            <RichTextEditToolbarSelect Action="RichTextEditAction.Color" />
+            <RichTextEditToolbarSelect Action="RichTextEditAction.Background" />
+        </RichTextEditToolbarGroup>
+        <RichTextEditToolbarGroup>
+            <RichTextEditToolbarButton Action="RichTextEditAction.Link" />
+            <RichTextEditToolbarButton Action="RichTextEditAction.Image" />
+        </RichTextEditToolbarGroup>
+            <RichTextEditToolbarGroup Float="Float.End">
+                <Button Clicked="@DownloadAsPdf"><Icon Name="IconName.FilePdf" /></Button>
+            </RichTextEditToolbarGroup>
+        </Toolbar>
+    </RichTextEdit>
+</RadzenCard>
+
+@code{
+    public string selectedFont { get; set; } = "Times New Roman";
+    private string pdfDataUri;
+    protected RichTextEdit richTextEditRef;
+    protected bool readOnly;
+    protected string htmlValue = "<h1>Hello World!!!</h1>";
+
+    @* public void HandleFontSelected(string font)
+    {
+        selectedFont = font;
+        SetFont();
+        StateHasChanged();
+    }
+
+    public string SetFont()
+    {
+        return $"font-family: {selectedFont}";
+    } *@
+
+    public async Task OnContentChanged()
+    {
+        htmlValue = await richTextEditRef.GetHtmlAsync();
+    }
+
+    public async Task DownloadAsPdf()
+    {
+        pdfDataUri = _pdfService.GeneratePdfFromHtml(htmlValue);
+        await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{pdfDataUri}`, `_blank`)");
+    }
+}

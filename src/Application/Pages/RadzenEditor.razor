@@ -1,5 +1,23 @@
-<RadzenHtmlEditor @bind-Value=@htmlValue UploadUrl="upload/image" />
+@page "/radzen-editor"
+
+@using Application.Services
+@using WkHtmlToPdfDotNet
+@using WkHtmlToPdfDotNet.Contracts
+@inject NavigationManager Navigation
+@inject PdfService _pdfService
+
+<RadzenCard>
+    <RadzenButton Click=@(() => DownloadAsPdf()) Text="Download PDF" />
+    <RadzenHtmlEditor @bind-Value=@htmlValue UploadUrl="upload/image" />
+</RadzenCard>
 
 @code {
-    string htmlValue = "<h1>Hello World!!!</h1>";
+    private string htmlValue = "<h1>Hello World!!!</h1>";
+    private string pdfDataUri;
+
+    private void DownloadAsPdf()
+    {
+        pdfDataUri = _pdfService.GeneratePdfFromHtml(htmlValue);
+        Navigation.NavigateTo(pdfDataUri);
+    }
 }

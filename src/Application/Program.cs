@@ -5,6 +5,8 @@ using Radzen;
 using WkHtmlToPdfDotNet.Contracts;
 using WkHtmlToPdfDotNet;
 using Application.Services;
+using Application.Services.Interface;
+using Application.Services.Strategies;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
@@ -29,8 +31,9 @@ builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
-builder.Services.AddScoped<PdfService>();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+builder.Services.AddScoped<WkHtmlToPdfConversionStrategy>();
+builder.Services.AddScoped(typeof(PdfConverter<>));
 
 var app = builder.Build();
 

@@ -1,13 +1,15 @@
+using System;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
+using Application.Services.Interface;
 
-namespace Application.Services
+namespace Application.Services.Strategies
 {
-    public class PdfService
+    public class WkHtmlToPdfConversionStrategy : IPdfConversionStrategy
     {
         private readonly IConverter _converter;
 
-        public PdfService(IConverter converter)
+        public WkHtmlToPdfConversionStrategy(IConverter converter)
         {
             _converter = converter;
         }

@@ -1,8 +1,9 @@
 @page "/radzen-editor"
 
 @using Application.Services
+@using Application.Services.Strategies
 @inject NavigationManager Navigation
-@inject PdfService _pdfService
+@inject PdfConverter<WkHtmlToPdfConversionStrategy> _pdfConverter
 @inject IJSRuntime JSRuntime
 
 <RadzenCard>
@@ -16,7 +17,7 @@
 
     private async Task DownloadAsPdf()
     {
-        pdfDataUri = _pdfService.GeneratePdfFromHtml(htmlValue);
+        pdfDataUri = _pdfConverter.GeneratePdfFromHtml(htmlValue);
         await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{pdfDataUri}`, `_blank`)");
     }
 }

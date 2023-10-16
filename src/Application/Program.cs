@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using Application.Data;
 using Radzen;
 using WkHtmlToPdfDotNet.Contracts;
 using WkHtmlToPdfDotNet;
@@ -26,13 +25,13 @@ builder.Services
     .AddFontAwesomeIcons()
     .AddBlazoriseRichTextEdit();
 
-builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 builder.Services.AddScoped<WkHtmlToPdfConversionStrategy>();
+builder.Services.AddScoped<PhantomJsPdfConversionStrategy>();
 builder.Services.AddScoped(typeof(PdfConverter<>));
 
 var app = builder.Build();

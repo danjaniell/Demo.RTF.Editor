@@ -7,6 +7,9 @@ namespace Application.Services.Strategies
 {
     public class PuppeteerSharpPdfConversionStrategy : IPdfConversionStrategy
     {
+        private const string template =
+            "<div id=\"footer-template\" style=\"font-size:10px !important; color:#808080; padding-left:10px\"><span class=\"date\"></span><span class=\"title\"></span> Page <span class=\"pageNumber\"></span> of <span class=\"totalPages\"></span></div>";
+
         public PuppeteerSharpPdfConversionStrategy() { }
 
         public PdfItem GeneratePdfFromHtml(string htmlValue)
@@ -16,8 +19,9 @@ namespace Application.Services.Strategies
             page.SetContentAsync(htmlValue).Wait();
             var pdfOptions = new PdfOptions
             {
+                HeaderTemplate = template,
+                FooterTemplate = template,
                 DisplayHeaderFooter = true,
-                Landscape = true,
                 PrintBackground = true,
                 Format = PaperFormat.A4,
                 MarginOptions = new MarginOptions
@@ -29,10 +33,7 @@ namespace Application.Services.Strategies
                 },
                 Scale = 1.5m,
             };
-            string filePath = $"{Environment.CurrentDirectory}\\{Guid.NewGuid()}.pdf";
-            page.PdfAsync(filePath, pdfOptions).Wait();
-            byte[] pdfBytes = File.ReadAllBytes(filePath);
-            File.Delete(filePath);
+            byte[] pdfBytes = page.PdfDataAsync(pdfOptions).Result;
             return new PdfItem(pdfBytes);
         }
 
@@ -43,8 +44,9 @@ namespace Application.Services.Strategies
             await page.SetContentAsync(htmlValue);
             var pdfOptions = new PdfOptions
             {
+                HeaderTemplate = template,
+                FooterTemplate = template,
                 DisplayHeaderFooter = true,
-                Landscape = true,
                 PrintBackground = true,
                 Format = PaperFormat.A4,
                 MarginOptions = new MarginOptions
@@ -56,10 +58,7 @@ namespace Application.Services.Strategies
                 },
                 Scale = 1.5m,
             };
-            string filePath = $"{Environment.CurrentDirectory}\\{Guid.NewGuid()}.pdf";
-            await page.PdfAsync(filePath, pdfOptions);
-            byte[] pdfBytes = await File.ReadAllBytesAsync(filePath);
-            File.Delete(filePath);
+            byte[] pdfBytes = await page.PdfDataAsync(pdfOptions);
             return new PdfItem(pdfBytes);
         }
     }

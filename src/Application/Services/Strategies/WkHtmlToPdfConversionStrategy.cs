@@ -21,8 +21,8 @@ namespace Application.Services.Strategies
                 GlobalSettings =
                 {
                     ColorMode = ColorMode.Color,
-                    Orientation = Orientation.Landscape,
-                    PaperSize = PaperKind.A4Plus
+                    Orientation = Orientation.Portrait,
+                    PaperSize = PaperKind.A4
                 },
                 Objects =
                 {
@@ -54,8 +54,8 @@ namespace Application.Services.Strategies
                 GlobalSettings =
                 {
                     ColorMode = ColorMode.Color,
-                    Orientation = Orientation.Landscape,
-                    PaperSize = PaperKind.A4Plus
+                    Orientation = Orientation.Portrait,
+                    PaperSize = PaperKind.A4
                 },
                 Objects =
                 {

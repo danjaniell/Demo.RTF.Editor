@@ -18,7 +18,7 @@
 @code {
     [Parameter] public string HtmlValue { get; set; } = "";
     private PdfItem? pdfItem;
-    private Type? selectedStrategy;
+    private Type selectedStrategy = typeof(WkHtmlToPdfConversionStrategy);
 
     private async Task GeneratePdf()
     {

@@ -4,6 +4,7 @@
             <RadzenRadioButtonListItem Text="WkHTML" Value=1/>
             <RadzenRadioButtonListItem Text="PhantomJS" Value=2 />
             <RadzenRadioButtonListItem Text="WeasyPrint" Value=3 />
+            <RadzenRadioButtonListItem Text="Puppeteer" Value=4 />
         </Items>
     </RadzenRadioButtonList>
     <RadzenButton Click=@(() => GeneratePdf()) Text="Generate PDF"></RadzenButton>
@@ -13,23 +14,29 @@
     [Inject] PdfConverter<WkHtmlToPdfConversionStrategy> wkHtmlToPdfConverter { get; set; }
     [Inject] PdfConverter<PhantomJsPdfConversionStrategy> phantomJsConverter { get; set; }
     [Inject] PdfConverter<WeasyPrintPdfConversionStrategy> weasyPrintConverter { get; set; }
+    [Inject] PdfConverter<PuppeteerSharpPdfConversionStrategy> puppeteerConverter { get; set; }
     [Parameter] public string HtmlValue { get; set; }
     private string pdfDataUri;
     private int selectedStrategy = 1;
 
     private async Task GeneratePdf()
     {
-        if (selectedStrategy == 1)
+        switch (selectedStrategy)
         {
-            pdfDataUri = wkHtmlToPdfConverter.GeneratePdfFromHtml(HtmlValue);
-        }
-        else if (selectedStrategy == 2)
-        {
-            pdfDataUri = phantomJsConverter.GeneratePdfFromHtml(HtmlValue);
-        }
-        else if (selectedStrategy == 3)
-        {
-            pdfDataUri = weasyPrintConverter.GeneratePdfFromHtml(HtmlValue);
+            case 1:
+                pdfDataUri = wkHtmlToPdfConverter.GeneratePdfFromHtml(HtmlValue);
+                break;
+            case 2:
+                pdfDataUri = phantomJsConverter.GeneratePdfFromHtml(HtmlValue);
+                break;
+            case 3:
+                pdfDataUri = weasyPrintConverter.GeneratePdfFromHtml(HtmlValue);
+                break;
+            case 4:
+                pdfDataUri = puppeteerConverter.GeneratePdfFromHtml(HtmlValue);
+                break;
+            default:
+                break;
         }
 
         await OpenPdfInNewTab(pdfDataUri);

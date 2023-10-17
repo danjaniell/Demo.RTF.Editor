@@ -8,6 +8,8 @@ using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Blazorise.RichTextEdit;
 using Sitko.Blazor.CKEditor;
+using PuppeteerSharp;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,8 @@ builder.Services.AddCKEditor(
         options.EditorClassName = "ClassicEditor";
     }
 );
+
+InitPuppeteer();
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
@@ -40,6 +44,7 @@ builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new 
 builder.Services.AddScoped<WkHtmlToPdfConversionStrategy>();
 builder.Services.AddScoped<PhantomJsPdfConversionStrategy>();
 builder.Services.AddScoped<WeasyPrintPdfConversionStrategy>();
+builder.Services.AddScoped<PuppeteerSharpPdfConversionStrategy>();
 builder.Services.AddScoped(typeof(PdfConverter<>));
 
 var app = builder.Build();
@@ -62,3 +67,13 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+
+static void InitPuppeteer()
+{
+    var bfOptions = new BrowserFetcherOptions
+    {
+        Path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
+    };
+    var bf = new BrowserFetcher(bfOptions);
+    bf.DownloadAsync().Wait();
+}

@@ -45,6 +45,7 @@ builder.Services.AddScoped<WkHtmlToPdfConversionStrategy>();
 builder.Services.AddScoped<PhantomJsPdfConversionStrategy>();
 builder.Services.AddScoped<WeasyPrintPdfConversionStrategy>();
 builder.Services.AddScoped<PuppeteerSharpPdfConversionStrategy>();
+builder.Services.AddScoped<JsPdfConversionStrategy>();
 builder.Services.AddScoped(typeof(PdfConverter<>));
 
 var app = builder.Build();

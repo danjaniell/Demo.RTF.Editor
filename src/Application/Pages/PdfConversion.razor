@@ -7,6 +7,7 @@
             <RadzenRadioButtonListItem Text="PhantomJS" Value=2 />
             <RadzenRadioButtonListItem Text="WeasyPrint" Value=3 />
             <RadzenRadioButtonListItem Text="Puppeteer" Value=4 />
+            <RadzenRadioButtonListItem Text="JsPDF" Value=5 />
         </Items>
     </RadzenRadioButtonList>
     <RadzenButton Click=@(() => GeneratePdf()) Text="Generate PDF"></RadzenButton>
@@ -17,6 +18,7 @@
     [Inject] PdfConverter<PhantomJsPdfConversionStrategy> phantomJsConverter { get; set; }
     [Inject] PdfConverter<WeasyPrintPdfConversionStrategy> weasyPrintConverter { get; set; }
     [Inject] PdfConverter<PuppeteerSharpPdfConversionStrategy> puppeteerConverter { get; set; }
+    [Inject] PdfConverter<JsPdfConversionStrategy> jsPdfConverter { get; set; }
     [Parameter] public string HtmlValue { get; set; }
     private PdfItem pdfItem;
     private int selectedStrategy = 1;
@@ -36,6 +38,9 @@
                 break;
             case 4:
                 pdfItem = await puppeteerConverter.GeneratePdfFromHtmlAsync(HtmlValue);
+                break;
+            case 5:
+                pdfItem = await jsPdfConverter.GeneratePdfFromHtmlAsync(HtmlValue);
                 break;
             default:
                 break;

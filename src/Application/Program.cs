@@ -73,7 +73,7 @@ static void InitPuppeteer()
 {
     var bfOptions = new BrowserFetcherOptions
     {
-        Path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
+        Path = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)
     };
     var bf = new BrowserFetcher(bfOptions);
     bf.DownloadAsync().Wait();

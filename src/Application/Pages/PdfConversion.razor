@@ -1,50 +1,28 @@
 @using Application.Models
+@using Services.Interface
+@inject IServiceProvider _serviceProvider;
 
 <RadzenCard>
-    <RadzenRadioButtonList @bind-Value=@selectedStrategy TValue="int" class="mb-5" Orientation="Radzen.Orientation.Horizontal">
+    <RadzenRadioButtonList @bind-Value=@selectedStrategy TValue="Type" class="mb-5" Orientation="Radzen.Orientation.Horizontal">
         <Items>
-            <RadzenRadioButtonListItem Text="WkHTML" Value=1/>
-            <RadzenRadioButtonListItem Text="PhantomJS" Value=2 />
-            <RadzenRadioButtonListItem Text="WeasyPrint" Value=3 />
-            <RadzenRadioButtonListItem Text="Puppeteer" Value=4 />
-            <RadzenRadioButtonListItem Text="JsPDF" Value=5 />
+            <RadzenRadioButtonListItem Text="WkHTML" Value="@typeof(WkHtmlToPdfConversionStrategy)"/>
+            <RadzenRadioButtonListItem Text="PhantomJS" Value="@typeof(PhantomJsPdfConversionStrategy)" />
+            <RadzenRadioButtonListItem Text="WeasyPrint" Value="@typeof(WeasyPrintPdfConversionStrategy)" />
+            <RadzenRadioButtonListItem Text="Puppeteer" Value="@typeof(PuppeteerSharpPdfConversionStrategy)" />
+            <RadzenRadioButtonListItem Text="JsPDF" Value="@typeof(JsPdfConversionStrategy)" />
         </Items>
     </RadzenRadioButtonList>
     <RadzenButton Click=@(() => GeneratePdf()) Text="Generate PDF"></RadzenButton>
 </RadzenCard>
 
 @code {
-    [Inject] PdfConverter<WkHtmlToPdfConversionStrategy> wkHtmlToPdfConverter { get; set; }
-    [Inject] PdfConverter<PhantomJsPdfConversionStrategy> phantomJsConverter { get; set; }
-    [Inject] PdfConverter<WeasyPrintPdfConversionStrategy> weasyPrintConverter { get; set; }
-    [Inject] PdfConverter<PuppeteerSharpPdfConversionStrategy> puppeteerConverter { get; set; }
-    [Inject] PdfConverter<JsPdfConversionStrategy> jsPdfConverter { get; set; }
-    [Parameter] public string HtmlValue { get; set; }
-    private PdfItem pdfItem;
-    private int selectedStrategy = 1;
+    [Parameter] public string HtmlValue { get; set; } = "";
+    private PdfItem? pdfItem;
+    private Type? selectedStrategy;
 
     private async Task GeneratePdf()
     {
-        switch (selectedStrategy)
-        {
-            case 1:
-                pdfItem = await wkHtmlToPdfConverter.GeneratePdfFromHtmlAsync(HtmlValue);
-                break;
-            case 2:
-                pdfItem = await phantomJsConverter.GeneratePdfFromHtmlAsync(HtmlValue);
-                break;
-            case 3:
-                pdfItem = await weasyPrintConverter.GeneratePdfFromHtmlAsync(HtmlValue);
-                break;
-            case 4:
-                pdfItem = await puppeteerConverter.GeneratePdfFromHtmlAsync(HtmlValue);
-                break;
-            case 5:
-                pdfItem = await jsPdfConverter.GeneratePdfFromHtmlAsync(HtmlValue);
-                break;
-            default:
-                break;
-        }
+        pdfItem = await CreatePdfConverter(selectedStrategy).GeneratePdfFromHtmlAsync(HtmlValue);
         string blobUrl = await GetBlobUrl(pdfItem.Bytes);
         await OpenPdfInNewTab(blobUrl);
     }
@@ -59,5 +37,14 @@
         return await JSRuntime.InvokeAsync<string>("createBlobFromByteArray", pdfBytes);
     }
 
+    public IPdfConverter CreatePdfConverter(Type? selectedStrategy)
+    {
+        if (selectedStrategy == null)
+        {
+            throw new ArgumentException("Selected strategy is null.");
+        }
 
+        Type pdfConverterType = typeof(PdfConverter<>).MakeGenericType(selectedStrategy);
+        return (IPdfConverter)_serviceProvider.GetService(pdfConverterType)!;
+    }
 }

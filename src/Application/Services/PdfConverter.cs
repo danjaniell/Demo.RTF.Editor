@@ -3,7 +3,7 @@ using Application.Services.Interface;
 
 namespace Application.Services
 {
-    public class PdfConverter<T>
+    public class PdfConverter<T> : IPdfConverter
         where T : IPdfConversionStrategy
     {
         private readonly IServiceProvider _serviceProvider;

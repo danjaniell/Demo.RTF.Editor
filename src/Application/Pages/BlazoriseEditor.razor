@@ -53,8 +53,7 @@
 
 @code{
     public string selectedFont { get; set; } = "Times New Roman";
-    private string pdfDataUri;
-    protected RichTextEdit richTextEditRef;
+    protected RichTextEdit? richTextEditRef;
     protected bool readOnly;
     protected string htmlValue = "<h1>Hello World!!!</h1>";
 
@@ -72,6 +71,6 @@
 
     public async Task OnContentChanged()
     {
-        htmlValue = await richTextEditRef.GetHtmlAsync();
+        htmlValue = await richTextEditRef!.GetHtmlAsync();
     }
 }

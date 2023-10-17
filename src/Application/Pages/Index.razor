@@ -9,6 +9,7 @@
         <RadzenSplitButtonItem Text="BlazoriseQuill" Value="2" />
         <RadzenSplitButtonItem Text="Quill" Value="3" />
         <RadzenSplitButtonItem Text="CKEditor" Value="4" />
+        <RadzenSplitButtonItem Text="JoditEditor" Value="5" />
     </ChildContent>
 </RadzenSplitButton>
 @if (componentToShow == "1")
@@ -26,6 +27,10 @@
 @if (componentToShow == "4")
 {
     <CKEditEditor />
+}
+@if (componentToShow == "5")
+{
+    <JoditEditor />
 }
 
 @code {

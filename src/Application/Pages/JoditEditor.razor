@@ -1,0 +1,34 @@
+@page "/jodit-editor"
+@inject IJSRuntime JSRuntime
+
+<RadzenCard>
+    <PdfConversion HtmlValue="@htmlValue"/>
+    <textarea id="editor" name="editor" @ref="@textEditorElement"></textarea>
+</RadzenCard>
+
+@code {
+    private string htmlValue = "<h1>Hello World!!!</h1>";
+    private ElementReference textEditorElement;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("JoditFunctions.createEditor");
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        JSRuntime.InvokeVoidAsync("registerUpdateHtmlValueFunction", DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public void UpdateHtmlValue(string newValue)
+    {
+        htmlValue = newValue;
+        StateHasChanged();
+    }
+}

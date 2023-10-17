@@ -24,16 +24,16 @@
         switch (selectedStrategy)
         {
             case 1:
-                pdfDataUri = wkHtmlToPdfConverter.GeneratePdfFromHtml(HtmlValue);
+                pdfDataUri = await wkHtmlToPdfConverter.GeneratePdfFromHtmlAsync(HtmlValue);
                 break;
             case 2:
-                pdfDataUri = phantomJsConverter.GeneratePdfFromHtml(HtmlValue);
+                pdfDataUri = await phantomJsConverter.GeneratePdfFromHtmlAsync(HtmlValue);
                 break;
             case 3:
-                pdfDataUri = weasyPrintConverter.GeneratePdfFromHtml(HtmlValue);
+                pdfDataUri = await weasyPrintConverter.GeneratePdfFromHtmlAsync(HtmlValue);
                 break;
             case 4:
-                pdfDataUri = puppeteerConverter.GeneratePdfFromHtml(HtmlValue);
+                pdfDataUri = await puppeteerConverter.GeneratePdfFromHtmlAsync(HtmlValue);
                 break;
             default:
                 break;

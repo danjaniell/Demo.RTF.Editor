@@ -17,5 +17,11 @@ namespace Application.Services
             var specificStrategy = _serviceProvider.GetRequiredService<T>();
             return specificStrategy.GeneratePdfFromHtml(htmlValue);
         }
+
+        public async Task<string> GeneratePdfFromHtmlAsync(string htmlValue)
+        {
+            var specificStrategy = _serviceProvider.GetRequiredService<T>();
+            return await specificStrategy.GeneratePdfFromHtmlAsync(htmlValue);
+        }
     }
 }

@@ -13,5 +13,12 @@ namespace Application.Services.Strategies
             var pdfBytes = client.GeneratePdf(htmlValue);
             return $"data:application/pdf;base64,{Convert.ToBase64String(pdfBytes)}";
         }
+
+        public async Task<string> GeneratePdfFromHtmlAsync(string htmlValue)
+        {
+            using WeasyPrintClient client = new();
+            var pdfBytes = await client.GeneratePdfAsync(htmlValue);
+            return $"data:application/pdf;base64,{Convert.ToBase64String(pdfBytes)}";
+        }
     }
 }

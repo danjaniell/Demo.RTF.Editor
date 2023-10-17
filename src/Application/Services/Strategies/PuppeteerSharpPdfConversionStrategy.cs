@@ -34,5 +34,32 @@ namespace Application.Services.Strategies
             File.Delete(filePath);
             return $"data:application/pdf;base64,{Convert.ToBase64String(pdfBytes)}";
         }
+
+        public async Task<string> GeneratePdfFromHtmlAsync(string htmlValue)
+        {
+            using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+            using var page = await browser.NewPageAsync();
+            await page.SetContentAsync(htmlValue);
+            var pdfOptions = new PdfOptions
+            {
+                DisplayHeaderFooter = true,
+                Landscape = true,
+                PrintBackground = true,
+                Format = PaperFormat.A4,
+                MarginOptions = new MarginOptions
+                {
+                    Top = "1cm",
+                    Bottom = "1cm",
+                    Left = "1cm",
+                    Right = "1cm"
+                },
+                Scale = 1.5m,
+            };
+            string filePath = $"{Environment.CurrentDirectory}\\{Guid.NewGuid()}.pdf";
+            await page.PdfAsync(filePath, pdfOptions);
+            byte[] pdfBytes = await File.ReadAllBytesAsync(filePath);
+            File.Delete(filePath);
+            return $"data:application/pdf;base64,{Convert.ToBase64String(pdfBytes)}";
+        }
     }
 }

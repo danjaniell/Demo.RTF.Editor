@@ -1,8 +1,10 @@
+using Application.Models;
+
 namespace Application.Services.Interface
 {
     public interface IPdfConversionStrategy
     {
-        string GeneratePdfFromHtml(string htmlValue);
-        Task<string> GeneratePdfFromHtmlAsync(string htmlValue);
+        PdfItem GeneratePdfFromHtml(string htmlValue);
+        Task<PdfItem> GeneratePdfFromHtmlAsync(string htmlValue);
     }
 }

@@ -1,7 +1,7 @@
-using System;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
 using Application.Services.Interface;
+using Application.Models;
 
 namespace Application.Services.Strategies
 {
@@ -14,7 +14,7 @@ namespace Application.Services.Strategies
             _converter = converter;
         }
 
-        public string GeneratePdfFromHtml(string htmlValue)
+        public PdfItem GeneratePdfFromHtml(string htmlValue)
         {
             var doc = new HtmlToPdfDocument()
             {
@@ -44,10 +44,10 @@ namespace Application.Services.Strategies
 
             byte[] pdfBytes = _converter.Convert(doc);
 
-            return $"data:application/pdf;base64,{Convert.ToBase64String(pdfBytes)}";
+            return new PdfItem(pdfBytes);
         }
 
-        public async Task<string> GeneratePdfFromHtmlAsync(string htmlValue)
+        public async Task<PdfItem> GeneratePdfFromHtmlAsync(string htmlValue)
         {
             var doc = new HtmlToPdfDocument()
             {
@@ -77,9 +77,7 @@ namespace Application.Services.Strategies
 
             byte[] pdfBytes = _converter.Convert(doc);
 
-            string base64String = Convert.ToBase64String(pdfBytes);
-
-            return await Task.FromResult($"data:application/pdf;base64,{base64String}");
+            return await Task.FromResult(new PdfItem(pdfBytes));
         }
     }
 }

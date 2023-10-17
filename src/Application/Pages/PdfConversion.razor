@@ -1,3 +1,5 @@
+@using Application.Models
+
 <RadzenCard>
     <RadzenRadioButtonList @bind-Value=@selectedStrategy TValue="int" class="mb-5" Orientation="Radzen.Orientation.Horizontal">
         <Items>
@@ -16,7 +18,7 @@
     [Inject] PdfConverter<WeasyPrintPdfConversionStrategy> weasyPrintConverter { get; set; }
     [Inject] PdfConverter<PuppeteerSharpPdfConversionStrategy> puppeteerConverter { get; set; }
     [Parameter] public string HtmlValue { get; set; }
-    private string pdfDataUri;
+    private PdfItem pdfItem;
     private int selectedStrategy = 1;
 
     private async Task GeneratePdf()
@@ -24,32 +26,26 @@
         switch (selectedStrategy)
         {
             case 1:
-                pdfDataUri = await wkHtmlToPdfConverter.GeneratePdfFromHtmlAsync(HtmlValue);
+                pdfItem = await wkHtmlToPdfConverter.GeneratePdfFromHtmlAsync(HtmlValue);
                 break;
             case 2:
-                pdfDataUri = await phantomJsConverter.GeneratePdfFromHtmlAsync(HtmlValue);
+                pdfItem = await phantomJsConverter.GeneratePdfFromHtmlAsync(HtmlValue);
                 break;
             case 3:
-                pdfDataUri = await weasyPrintConverter.GeneratePdfFromHtmlAsync(HtmlValue);
+                pdfItem = await weasyPrintConverter.GeneratePdfFromHtmlAsync(HtmlValue);
                 break;
             case 4:
-                pdfDataUri = await puppeteerConverter.GeneratePdfFromHtmlAsync(HtmlValue);
+                pdfItem = await puppeteerConverter.GeneratePdfFromHtmlAsync(HtmlValue);
                 break;
             default:
                 break;
         }
 
-        await OpenPdfInNewTab(pdfDataUri);
+        await OpenPdfInNewTab(pdfItem.DataUri);
     }
 
     private async Task OpenPdfInNewTab(string dataUri)
     {
         await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{dataUri}`, `_blank`)");
     }
-
-    void OnChange(int? value)
-    {
-        selectedStrategy = value.Value;
-    }
 }
-

@@ -1,3 +1,4 @@
+using Application.Models;
 using Application.Services.Interface;
 using PuppeteerSharp;
 using PuppeteerSharp.Media;
@@ -8,7 +9,7 @@ namespace Application.Services.Strategies
     {
         public PuppeteerSharpPdfConversionStrategy() { }
 
-        public string GeneratePdfFromHtml(string htmlValue)
+        public PdfItem GeneratePdfFromHtml(string htmlValue)
         {
             using var browser = Puppeteer.LaunchAsync(new LaunchOptions { Headless = true }).Result;
             using var page = browser.NewPageAsync().Result;
@@ -32,10 +33,10 @@ namespace Application.Services.Strategies
             page.PdfAsync(filePath, pdfOptions).Wait();
             byte[] pdfBytes = File.ReadAllBytes(filePath);
             File.Delete(filePath);
-            return $"data:application/pdf;base64,{Convert.ToBase64String(pdfBytes)}";
+            return new PdfItem(pdfBytes);
         }
 
-        public async Task<string> GeneratePdfFromHtmlAsync(string htmlValue)
+        public async Task<PdfItem> GeneratePdfFromHtmlAsync(string htmlValue)
         {
             using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
             using var page = await browser.NewPageAsync();
@@ -59,7 +60,7 @@ namespace Application.Services.Strategies
             await page.PdfAsync(filePath, pdfOptions);
             byte[] pdfBytes = await File.ReadAllBytesAsync(filePath);
             File.Delete(filePath);
-            return $"data:application/pdf;base64,{Convert.ToBase64String(pdfBytes)}";
+            return new PdfItem(pdfBytes);
         }
     }
 }

@@ -1,3 +1,4 @@
+using Application.Models;
 using Application.Services.Interface;
 
 namespace Application.Services
@@ -12,13 +13,13 @@ namespace Application.Services
             _serviceProvider = serviceProvider;
         }
 
-        public string GeneratePdfFromHtml(string htmlValue)
+        public PdfItem GeneratePdfFromHtml(string htmlValue)
         {
             var specificStrategy = _serviceProvider.GetRequiredService<T>();
             return specificStrategy.GeneratePdfFromHtml(htmlValue);
         }
 
-        public async Task<string> GeneratePdfFromHtmlAsync(string htmlValue)
+        public async Task<PdfItem> GeneratePdfFromHtmlAsync(string htmlValue)
         {
             var specificStrategy = _serviceProvider.GetRequiredService<T>();
             return await specificStrategy.GeneratePdfFromHtmlAsync(htmlValue);

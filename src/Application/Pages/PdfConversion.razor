@@ -40,12 +40,19 @@
             default:
                 break;
         }
-
-        await OpenPdfInNewTab(pdfItem.DataUri);
+        string blobUrl = await GetBlobUrl(pdfItem.Bytes);
+        await OpenPdfInNewTab(blobUrl);
     }
 
     private async Task OpenPdfInNewTab(string dataUri)
     {
         await JSRuntime.InvokeVoidAsync("eval", $"let _discard_ = open(`{dataUri}`, `_blank`)");
     }
+
+    private async Task<string> GetBlobUrl(byte[] pdfBytes)
+    {
+        return await JSRuntime.InvokeAsync<string>("createBlobFromByteArray", pdfBytes);
+    }
+
+
 }

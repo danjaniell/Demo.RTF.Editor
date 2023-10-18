@@ -2,6 +2,7 @@
 @using Services.Interface
 @inject IServiceProvider _serviceProvider;
 
+<TemplateSelector HtmlTemplateValue="@HtmlValue" HtmlTemplateValueChanged="UpdateHtmlValue" />
 <RadzenCard>
     <RadzenRadioButtonList @bind-Value=@selectedStrategy TValue="Type" class="mb-5" Orientation="Radzen.Orientation.Horizontal">
         <Items>
@@ -16,9 +17,10 @@
 </RadzenCard>
 
 @code {
-    [Parameter] public string HtmlValue { get; set; } = "";
     private PdfItem? pdfItem;
     private Type selectedStrategy = typeof(WkHtmlToPdfConversionStrategy);
+    [Parameter] public string HtmlValue { get; set; } = "";
+    [Parameter] public Action<string> OnTemplateLoad { get; set; }
 
     private async Task GeneratePdf()
     {
@@ -35,6 +37,12 @@
     private async Task<string> GetBlobUrl(byte[] pdfBytes)
     {
         return await JSRuntime.InvokeAsync<string>("createBlobFromByteArray", pdfBytes);
+    }
+
+    private void UpdateHtmlValue(string updatedHtmlValue)
+    {
+        HtmlValue = updatedHtmlValue;
+        OnTemplateLoad?.Invoke(updatedHtmlValue);
     }
 
     public IPdfConverter CreatePdfConverter(Type? selectedStrategy)

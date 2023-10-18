@@ -2,7 +2,7 @@
 
 <RadzenCard>
     @* <FontSelector FontSelected="@HandleFontSelected" /> *@
-    <PdfConversion HtmlValue="@htmlValue"/>
+    <PdfConversion HtmlValue="@htmlValue" OnTemplateLoad="OnTemplateLoad"/>
     <RichTextEdit @ref="richTextEditRef"
                   Theme="RichTextEditTheme.Snow"
                   ContentChanged="@OnContentChanged"
@@ -72,5 +72,12 @@
     public async Task OnContentChanged()
     {
         htmlValue = await richTextEditRef!.GetHtmlAsync();
+        StateHasChanged();
+    }
+
+    private void OnTemplateLoad(string htmlTemplateValue)
+    {
+        htmlValue = htmlTemplateValue;
+        StateHasChanged();
     }
 }

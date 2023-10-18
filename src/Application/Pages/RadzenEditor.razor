@@ -1,10 +1,16 @@
 @page "/radzen-editor"
 
 <RadzenCard>
-    <PdfConversion HtmlValue="@htmlValue"/>
+    <PdfConversion HtmlValue="@htmlValue" OnTemplateLoad="OnTemplateLoad"/>
     <RadzenHtmlEditor @bind-Value=@htmlValue UploadUrl="upload/image" />
 </RadzenCard>
 
 @code {
     private string htmlValue = "<h1>Hello World!!!</h1>";
+
+    private void OnTemplateLoad(string htmlTemplateValue)
+    {
+        htmlValue = htmlTemplateValue;
+        StateHasChanged();
+    }
 }

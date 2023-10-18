@@ -1,0 +1,52 @@
+<RadzenCard>
+    <RadzenRadioButtonList @bind-Value=@selectedItem TValue="string" class="mb-5" Orientation="Radzen.Orientation.Horizontal">
+        <Items>
+            @foreach (var file in GetTemplates())
+            {
+                <RadzenRadioButtonListItem Text="@Path.GetFileNameWithoutExtension(file)" Value="@Path.GetFileNameWithoutExtension(file)" />
+            }
+        </Items>
+    </RadzenRadioButtonList>
+    <RadzenButton Click=@(() => LoadSelectedTemplate()) Text="Change Template"></RadzenButton>
+</RadzenCard>
+
+@code {
+    private string selectedItem;
+
+    [Parameter] 
+    public string HtmlTemplateValue { get; set; } = "";
+
+    [Parameter] 
+    public Action<string> HtmlTemplateValueChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        var files = GetTemplates();
+        if (files.Length > 0)
+        {
+            selectedItem = Path.GetFileNameWithoutExtension(files[0]);
+        }
+    }
+
+    private string[] GetTemplates()
+    {
+        string templatesDirectory = Path.Combine(Environment.CurrentDirectory, "Templates");
+        return Directory.GetFiles(templatesDirectory, "*.html");
+    }
+
+    private async Task LoadSelectedTemplate()
+    {
+        if (string.IsNullOrEmpty(selectedItem))
+        {
+            // Handle the case when no template is selected
+            // Display a message or perform a different action
+            return;
+        }
+
+        string templatePath = Path.Combine(Environment.CurrentDirectory, "Templates", $"{selectedItem}.html");
+        HtmlTemplateValue = await File.ReadAllTextAsync(templatePath);
+        HtmlTemplateValueChanged?.Invoke(HtmlTemplateValue);
+    }
+}

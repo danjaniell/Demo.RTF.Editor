@@ -2,7 +2,7 @@
 @inject IJSRuntime JSRuntime
 
 <RadzenCard>
-    <PdfConversion HtmlValue="@htmlValue"/>
+    <PdfConversion HtmlValue="@htmlValue" OnTemplateLoad="OnTemplateLoad"/>
     <textarea id="editor" name="editor" @ref="@textEditorElement"></textarea>
 </RadzenCard>
 
@@ -29,6 +29,12 @@
     public void UpdateHtmlValue(string newValue)
     {
         htmlValue = newValue;
+        StateHasChanged();
+    }
+
+    private void OnTemplateLoad(string htmlTemplateValue)
+    {
+        htmlValue = htmlTemplateValue;
         StateHasChanged();
     }
 }

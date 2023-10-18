@@ -1,43 +1,78 @@
 ﻿@page "/"
 @using Application.Pages
-
 <PageTitle>Home</PageTitle>
 
-<RadzenSplitButton Click=@OnClick Text="Select Text Editor" Icon="account_circle">
+<RadzenSplitButton Click=@OnClick Text="@buttonText" Icon="account_circle">
     <ChildContent>
-        <RadzenSplitButtonItem Text="Radzen" Value="1" />
-        <RadzenSplitButtonItem Text="BlazoriseQuill" Value="2" />
-        <RadzenSplitButtonItem Text="Quill" Value="3" />
-        <RadzenSplitButtonItem Text="CKEditor" Value="4" />
-        <RadzenSplitButtonItem Text="JoditEditor" Value="5" />
+        <RadzenSplitButtonItem Text="jodit" Value="1" />
+        <RadzenSplitButtonItem Text="CKEditor" Value="2" />
+        <RadzenSplitButtonItem Text="QuillJs" Value="3" />
+        <RadzenSplitButtonItem Text="Radzen HTMLEditor" Value="4" />
+        <RadzenSplitButtonItem Text="Blazorise RichTextEdit" Value="5" />
     </ChildContent>
 </RadzenSplitButton>
-@if (componentToShow == "1")
+
+@if (selectedComponent == "1")
 {
-    <RadzenEditor />
+    <JoditEditor/>
 }
-@if (componentToShow == "2")
+@if (selectedComponent == "2")
+{
+    <CKEditor/>
+}
+@if (selectedComponent == "3")
+{
+    <QuillEditor/>
+}
+@if (selectedComponent == "4")
+{
+    <RadzenEditor/>
+}
+@if (selectedComponent == "5")
 {
     <BlazoriseEditor />
 }
-@if (componentToShow == "3")
-{
-    <QuillEditor />
-}
-@if (componentToShow == "4")
-{
-    <CKEditEditor />
-}
-@if (componentToShow == "5")
-{
-    <JoditEditor />
-}
 
 @code {
-    string componentToShow = "0";
+    string selectedComponent = "0";
+    string buttonText = nameof(JoditEditor);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            UpdateButtonLabels("1");
+            await InvokeAsync(StateHasChanged);
+        }
+    }
 
     void OnClick(RadzenSplitButtonItem item)
     {
-        componentToShow = item.Value;
+        UpdateButtonLabels(item.Value);
+    }
+
+    void UpdateButtonLabels(string componentToShow)
+    {
+        selectedComponent = componentToShow;
+        if (componentToShow == "1")
+        {
+            buttonText = nameof(JoditEditor);
+        }
+        else if (componentToShow == "2")
+        {
+            buttonText = nameof(CKEditor);
+        }
+        else if (componentToShow == "3")
+        {
+            buttonText = nameof(QuillEditor);
+        }
+        else if (componentToShow == "4")
+        {
+            buttonText = nameof(RadzenEditor);
+        }
+        else if (componentToShow == "5")
+        {
+            buttonText = nameof(BlazoriseEditor);
+        }
     }
 }

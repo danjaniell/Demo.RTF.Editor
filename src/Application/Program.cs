@@ -7,7 +7,6 @@ using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Blazorise.RichTextEdit;
-using Sitko.Blazor.CKEditor;
 using PuppeteerSharp;
 using System.Reflection;
 
@@ -24,16 +23,6 @@ builder.Services
     .AddBootstrapProviders()
     .AddFontAwesomeIcons()
     .AddBlazoriseRichTextEdit();
-
-builder.Services.AddCKEditor(
-    builder.Configuration,
-    options =>
-    {
-        // options.ScriptPath = "https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js";
-        options.ScriptPath = "js/ckeditor.js";
-        options.EditorClassName = "ClassicEditor";
-    }
-);
 
 InitPuppeteer();
 builder.Services.AddScoped<DialogService>();

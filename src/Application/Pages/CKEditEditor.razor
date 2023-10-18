@@ -1,12 +1,42 @@
 @page "/ckedit-editor"
-@using Sitko.Blazor.CKEditor
-@using Sitko.Blazor.CKEditor.Bundle
+@inject IJSRuntime JSRuntime
+
+<link href="css/ckeditor.styles.css" rel="stylesheet" />
 
 <RadzenCard>
-    <PdfConversion HtmlValue="@htmlValue"/>
-    <CKEditor @bind-Value="@htmlValue" />
+    <PdfConversion HtmlValue="@htmlValue" />
+    <div data-editor="DecoupledEditor" data-collaboration="false" data-revision-history="false">
+        <div class="row">
+            <div class="document-editor__toolbar"></div>
+        </div>
+        <div class="editor-container">
+            <div class="editor" @ref="@textEditorElement"></div>
+        </div>
+    </div>
 </RadzenCard>
 
 @code {
     private string htmlValue = "<h1>Hello World!!!</h1>";
+    private ElementReference textEditorElement;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("CKEditorFunctions.createEditor", textEditorElement);
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        JSRuntime.InvokeVoidAsync("registerUpdateHtmlValueFunction", DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public void UpdateHtmlValue(string newValue)
+    {
+        htmlValue = newValue;
+        StateHasChanged();
+    }
 }

@@ -1,25 +1,29 @@
 (function () {
   window.JoditFunctions = {
-    getJoditContent: function (joditEditor) {
-      return joditEditor.value;
-    },
-    createEditor: function () {
-      const joditEditor = Jodit.make('#editor', {
-        language: 'en'
-       });
-      joditEditor.value = '<h1>Hello World!!!</h1>';
+    joditEditor: null,
 
-      joditEditor.events.on('change', function () {
-        window.Blazor.updateHtmlValue(joditEditor.value);
+    setTextValue: function (htmlValue) {
+      window.JoditFunctions.joditEditor.setEditorValue(htmlValue);
+    },
+
+    createEditor: function () {
+      window.JoditFunctions.joditEditor = Jodit.make("#editor", {
+        language: "en",
       });
-    }
+      window.JoditFunctions.joditEditor.setEditorValue(
+        "<h1>Hello World!!!</h1>"
+      );
+      window.JoditFunctions.joditEditor.events.on("change", function () {
+        window.Blazor.updateHtmlValue(window.JoditFunctions.joditEditor.value);
+      });
+    },
   };
 
-  window.registerUpdateHtmlValueFunction = function (dotnetHelper) {
+  window.registerUpdateHtmlValueFunction = function (dotNetHelper) {
     window.Blazor = {
       updateHtmlValue: function (htmlValue) {
-        dotnetHelper.invokeMethodAsync('UpdateHtmlValue', htmlValue);
-      }
+        dotNetHelper.invokeMethodAsync("UpdateHtmlValue", htmlValue);
+      },
     };
   };
 })();

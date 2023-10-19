@@ -3,26 +3,19 @@
 
 <RadzenCard>
     <PdfConversion HtmlValue="@htmlValue" OnTemplateLoad="OnTemplateLoad"/>
-    <textarea id="editor" name="editor" @ref="@textEditorElement"></textarea>
+    <textarea id="editor" name="editor"></textarea>
 </RadzenCard>
 
 @code {
     private string htmlValue = "<h1>Hello World!!!</h1>";
-    private ElementReference textEditorElement;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            await JSRuntime.InvokeVoidAsync("registerUpdateHtmlValueFunction", DotNetObjectReference.Create(this));
             await JSRuntime.InvokeVoidAsync("JoditFunctions.createEditor");
         }
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        JSRuntime.InvokeVoidAsync("registerUpdateHtmlValueFunction", DotNetObjectReference.Create(this));
     }
 
     [JSInvokable]
@@ -34,6 +27,7 @@
 
     private void OnTemplateLoad(string htmlTemplateValue)
     {
+        JSRuntime.InvokeVoidAsync("JoditFunctions.setTextValue", htmlTemplateValue);
         htmlValue = htmlTemplateValue;
         StateHasChanged();
     }

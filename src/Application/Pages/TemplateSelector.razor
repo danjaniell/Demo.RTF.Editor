@@ -11,13 +11,13 @@
 </RadzenCard>
 
 @code {
-    private string selectedItem;
+    private string? selectedItem;
 
-    [Parameter] 
+    [Parameter]
     public string HtmlTemplateValue { get; set; } = "";
 
-    [Parameter] 
-    public Action<string> HtmlTemplateValueChanged { get; set; }
+    [Parameter]
+    public Action<string>? HtmlTemplateValueChanged { get; set; }
 
     protected override void OnInitialized()
     {

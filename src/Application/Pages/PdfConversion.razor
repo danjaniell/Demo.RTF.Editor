@@ -20,7 +20,7 @@
     private PdfItem? pdfItem;
     private Type selectedStrategy = typeof(PuppeteerSharpPdfConversionStrategy);
     [Parameter] public string HtmlValue { get; set; } = "";
-    [Parameter] public Action<string> OnTemplateLoad { get; set; }
+    [Parameter] public Action<string>? OnTemplateLoad { get; set; }
 
     private async Task GeneratePdf()
     {

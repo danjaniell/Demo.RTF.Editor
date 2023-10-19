@@ -7,8 +7,7 @@ namespace Application.Services.Strategies
 {
     public class PuppeteerSharpPdfConversionStrategy : IPdfConversionStrategy
     {
-        private const string template =
-            "<div style='font-size: 9px; text-align: right;'>Page <span class='pageNumber'></span> of <span class='totalPages'></span></div>";
+        private const string template = "<div style='font-size: 9px; text-align: right;'></div>";
 
         public PuppeteerSharpPdfConversionStrategy() { }
 
@@ -19,18 +18,16 @@ namespace Application.Services.Strategies
             page.SetContentAsync(htmlValue).Wait();
             var pdfOptions = new PdfOptions
             {
-                HeaderTemplate = template,
-                FooterTemplate = template,
-                DisplayHeaderFooter = true,
                 PrintBackground = true,
                 Format = PaperFormat.A4,
                 MarginOptions = new MarginOptions
                 {
-                    Top = "1cm",
-                    Bottom = "1cm",
-                    Left = "1cm",
-                    Right = "1cm"
+                    Top = "5mm",
+                    Bottom = "1mm",
+                    Left = "5mm",
+                    Right = "5mm",
                 },
+                Scale = 1.2m
             };
             byte[] pdfBytes = page.PdfDataAsync(pdfOptions).Result;
             return new PdfItem(pdfBytes);
@@ -43,18 +40,16 @@ namespace Application.Services.Strategies
             await page.SetContentAsync(htmlValue);
             var pdfOptions = new PdfOptions
             {
-                HeaderTemplate = template,
-                FooterTemplate = template,
-                DisplayHeaderFooter = true,
                 PrintBackground = true,
                 Format = PaperFormat.A4,
                 MarginOptions = new MarginOptions
                 {
-                    Top = "1cm",
-                    Bottom = "1cm",
-                    Left = "1cm",
-                    Right = "1cm"
+                    Top = "5mm",
+                    Bottom = "1mm",
+                    Left = "5mm",
+                    Right = "5mm",
                 },
+                Scale = 1.2m
             };
             byte[] pdfBytes = await page.PdfDataAsync(pdfOptions);
             return new PdfItem(pdfBytes);

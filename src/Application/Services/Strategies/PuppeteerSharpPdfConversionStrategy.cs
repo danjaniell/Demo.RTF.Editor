@@ -8,7 +8,7 @@ namespace Application.Services.Strategies
     public class PuppeteerSharpPdfConversionStrategy : IPdfConversionStrategy
     {
         private const string template =
-            "<div id=\"footer-template\" style=\"font-size:10px !important; color:#808080; padding-left:10px\"><span class=\"date\"></span><span class=\"title\"></span> Page <span class=\"pageNumber\"></span> of <span class=\"totalPages\"></span></div>";
+            "<div style='font-size: 9px; text-align: right;'>Page <span class='pageNumber'></span> of <span class='totalPages'></span></div>";
 
         public PuppeteerSharpPdfConversionStrategy() { }
 
@@ -31,7 +31,6 @@ namespace Application.Services.Strategies
                     Left = "1cm",
                     Right = "1cm"
                 },
-                Scale = 1.5m,
             };
             byte[] pdfBytes = page.PdfDataAsync(pdfOptions).Result;
             return new PdfItem(pdfBytes);
@@ -56,7 +55,6 @@ namespace Application.Services.Strategies
                     Left = "1cm",
                     Right = "1cm"
                 },
-                Scale = 1.5m,
             };
             byte[] pdfBytes = await page.PdfDataAsync(pdfOptions);
             return new PdfItem(pdfBytes);

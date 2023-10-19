@@ -18,12 +18,4 @@
       });
     },
   };
-
-  window.registerUpdateHtmlValueFunction = function (dotNetHelper) {
-    window.Blazor = {
-      updateHtmlValue: function (htmlValue) {
-        dotNetHelper.invokeMethodAsync("UpdateHtmlValue", htmlValue);
-      },
-    };
-  };
 })();

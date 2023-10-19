@@ -13,9 +13,15 @@
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("registerUpdateHtmlValueFunction", DotNetObjectReference.Create(this));
             await JSRuntime.InvokeVoidAsync("JoditFunctions.createEditor");
         }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        JSRuntime.InvokeVoidAsync("registerUpdateHtmlValueFunction", DotNetObjectReference.Create(this));
     }
 
     [JSInvokable]

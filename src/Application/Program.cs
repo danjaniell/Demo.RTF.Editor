@@ -1,14 +1,15 @@
-using Radzen;
-using WkHtmlToPdfDotNet.Contracts;
-using WkHtmlToPdfDotNet;
+using System.Reflection;
 using Application.Services;
+using Application.Services.Interface;
 using Application.Services.Strategies;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Blazorise.RichTextEdit;
 using PuppeteerSharp;
-using System.Reflection;
+using Radzen;
+using WkHtmlToPdfDotNet;
+using WkHtmlToPdfDotNet.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,7 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+builder.Services.AddScoped<ITemplateBuilder, TemplateBuilder>();
 builder.Services.AddScoped<WkHtmlToPdfConversionStrategy>();
 builder.Services.AddScoped<PhantomJsPdfConversionStrategy>();
 builder.Services.AddScoped<WeasyPrintPdfConversionStrategy>();

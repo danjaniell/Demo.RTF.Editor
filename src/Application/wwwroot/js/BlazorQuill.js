@@ -126,6 +126,31 @@
       Block.blotName = "P";
       Quill.register(Block);
 
+      var BlockEmbed = Quill.import("blots/block/embed");
+
+      class keepHTML extends BlockEmbed {
+        static create(node) {
+          return node;
+        }
+
+        static value(node) {
+          return node;
+        }
+
+        static formats(node) {
+          if (node.classList.contains("keepHTML")) {
+            return {
+              keepHTML: true,
+            };
+          }
+          return super.formats(node);
+        }
+      }
+
+      keepHTML.tagName = "div";
+      keepHTML.blotName = "keepHTML";
+      Quill.register(keepHTML, true);
+
       Quill.register("modules/htmlEditButton", htmlEditButton);
 
       quillEditor = new Quill("#toolbar", {

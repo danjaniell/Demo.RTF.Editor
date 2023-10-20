@@ -26,7 +26,6 @@
             await JSRuntime.InvokeVoidAsync("CKEditorFunctions.createEditor", textEditorElement);
         }
     }
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -42,6 +41,7 @@
 
     private void OnTemplateLoad(string htmlTemplateValue)
     {
+        JSRuntime.InvokeVoidAsync("CKEditorFunctions.setTextValue", htmlTemplateValue);
         htmlValue = htmlTemplateValue;
         StateHasChanged();
     }

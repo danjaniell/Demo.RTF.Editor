@@ -38,6 +38,7 @@
 
     private void OnTemplateLoad(string htmlTemplateValue)
     {
+        JSRuntime.InvokeVoidAsync("QuillFunctions.setTextValue", htmlTemplateValue);
         htmlValue = htmlTemplateValue;
         StateHasChanged();
     }

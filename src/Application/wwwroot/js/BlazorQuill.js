@@ -1,9 +1,10 @@
 (function () {
   window.QuillFunctions = {
-    getQuillHTML: function (quillControl) {
-      return quillControl.__quill.root.innerHTML;
+    quillEditor: null,
+    setTextValue: function (htmlValue) {
+      quillEditor.clipboard.dangerouslyPasteHTML(htmlValue);
     },
-    createQuill: function (quillElement) {
+    createQuill: function () {
       var fonts = [
         "Arial",
         "Courier",
@@ -45,25 +46,38 @@
       document.body.appendChild(node);
 
       var toolbarOptions = [
-        ["bold", "italic", "underline", "strike"], // toggled buttons
-        ["blockquote", "code-block"],
-
+        [{ font: fontNames }],
         [{ header: 1 }, { header: 2 }], // custom button values
-        [{ list: "ordered" }, { list: "bullet" }],
+        ["bold", "italic", "underline", "strike"], // toggled buttons
+        [{ align: ["center", "right", "justify"] }],
+        ["blockquote", "code-block"],
         [{ script: "sub" }, { script: "super" }], // superscript/subscript
+        [{ list: "ordered" }, { list: "bullet" }],
         [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+        [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+        ["link", "image", "video"],
         [{ direction: "rtl" }], // text direction
-
         [{ size: ["small", false, "large", "huge"] }], // custom dropdown
         [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-        [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-        [{ font: fontNames }],
-        [{ align: ["center", "right", "justify"] }],
-        ["link"],
-
         ["clean"], // remove formatting button
+        ["showHtml"],
       ];
+
+      var handlers = {
+        showHtml: () => {
+          if (this.txtArea.style.display === "") {
+            const html = this.txtArea.value;
+            if (html === "<p><br/></p>") {
+              this.html = null;
+            } else {
+              this.html = html.replace(new RegExp("<p><br/>", "g"), "<p>");
+            }
+            quillEditor.clipboard.dangerouslyPasteHTML(html);
+          }
+          this.txtArea.style.display =
+            this.txtArea.style.display === "none" ? "" : "none";
+        },
+      };
 
       var DirectionAttribute = Quill.import("attributors/attribute/direction");
       Quill.register(DirectionAttribute, true);
@@ -108,7 +122,12 @@
       Font.whitelist = fontNames;
       Quill.register(Font, true);
 
-      var quill = new Quill("#toolbar", {
+      var Block = Quill.import("blots/block");
+      Block.tagName = "div";
+      Block.blotName = "P";
+      Quill.register(Block);
+
+      quillEditor = new Quill("#toolbar", {
         modules: {
           toolbar: toolbarOptions,
         },
@@ -116,8 +135,8 @@
         placeholder: "Enter text here...",
       });
 
-      quill.on("text-change", function () {
-        window.Blazor.updateHtmlValue(quill.root.innerHTML);
+      quillEditor.on("text-change", function () {
+        window.Blazor.updateHtmlValue(quillEditor.root.innerHTML);
       });
     },
   };

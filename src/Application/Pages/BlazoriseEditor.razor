@@ -10,8 +10,9 @@
                   ReadOnly="@readOnly"
                   SubmitOnEnter="false"
                   ToolbarPosition="Placement.Bottom"
+                  @key="htmlValue"
                   >
-        <Editor><h1>Hello World!!!</h1></Editor>
+        <Editor>@(new MarkupString(htmlValue))</Editor>
         <Toolbar>
         <RichTextEditToolbarGroup>
             <RichTextEditToolbarButton Action="RichTextEditAction.Bold" />

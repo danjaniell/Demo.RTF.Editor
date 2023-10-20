@@ -1,5 +1,8 @@
 (function () {
   window.CKEditorFunctions = {
+    setTextValue: function (htmlValue) {
+      window.editor.setData(htmlValue);
+    },
     getCkEditorContent: function (ckEditor) {
       return ckEditor.getData();
     },

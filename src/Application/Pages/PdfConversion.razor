@@ -2,7 +2,7 @@
 @inject IServiceProvider _serviceProvider;
 @inject ITemplateBuilder _templateBuilder;
 
-<TemplateSelector HtmlTemplateValue="@HtmlValue" HtmlTemplateValueChanged="UpdateHtmlValue" />
+<TemplateSelector HtmlTemplateValue="@HtmlValue" HtmlTemplateValueChanged="OnHtmlTemplateChange" />
 <RadzenCard>
     <RadzenRadioButtonList @bind-Value=@selectedStrategy TValue="Type" class="mb-5" Orientation="Radzen.Orientation.Horizontal">
         <Items>
@@ -49,7 +49,7 @@
         return await JSRuntime.InvokeAsync<string>("createBlobFromByteArray", pdfBytes);
     }
 
-    private void UpdateHtmlValue(string updatedHtmlValue)
+    private void OnHtmlTemplateChange(string updatedHtmlValue)
     {
         HtmlValue = updatedHtmlValue;
         OnTemplateLoad?.Invoke(updatedHtmlValue);

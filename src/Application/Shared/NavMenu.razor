@@ -7,15 +7,29 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-    </nav>
-</div>
+<Sidebar @ref="sidebar">
+    <SidebarContent>
+        <SidebarNavigation>
+            <SidebarLabel>Main</SidebarLabel>
+            <SidebarItem>
+                <SidebarLink To="/" Title="Home">
+                    <Icon Name="IconName.Home" Margin="Margin.Is3.FromEnd" />Home
+                </SidebarLink>
+            </SidebarItem>
+        </SidebarNavigation>
+    </SidebarContent>
+</Sidebar>
+
+@code{
+    Sidebar sidebar;
+    SidebarSubItem mailSidebarSubItems;
+    SidebarSubItem appsSidebarSubItems;
+
+    void ToggleSidebar()
+    {
+        sidebar.Toggle();
+    }
+}
 
 @code {
     private bool collapseNavMenu = true;

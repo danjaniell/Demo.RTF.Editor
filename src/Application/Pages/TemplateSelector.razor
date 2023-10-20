@@ -1,17 +1,22 @@
-<RadzenCard>
-    <RadzenRadioButtonList @bind-Value=@selectedItem TValue="string" class="mb-5" Orientation="Radzen.Orientation.Horizontal">
-        <Items>
-            @foreach (var file in GetTemplates())
-            {
-                <RadzenRadioButtonListItem Text="@Path.GetFileNameWithoutExtension(file)" Value="@Path.GetFileNameWithoutExtension(file)" />
-            }
-        </Items>
-    </RadzenRadioButtonList>
-    <RadzenButton Click=@(() => LoadSelectedTemplate()) Text="Change Template"></RadzenButton>
-</RadzenCard>
+@if (hasTemplates)
+{
+    <RadzenCard>
+        <RadzenRadioButtonList @bind-Value=@selectedItem TValue="string" class="mb-5" Orientation="Radzen.Orientation.Horizontal">
+            <Items>
+                @foreach (var template in templates)
+                {
+                    <RadzenRadioButtonListItem Text="@Path.GetFileNameWithoutExtension(template)" Value="@Path.GetFileNameWithoutExtension(template)" />
+                }
+            </Items>
+        </RadzenRadioButtonList>
+        <RadzenButton Click=@(() => LoadSelectedTemplate()) Text="Change Template"></RadzenButton>
+    </RadzenCard>
+}
 
 @code {
     private string? selectedItem;
+    private readonly string[] templates;
+    private readonly bool hasTemplates;
 
     [Parameter]
     public string HtmlTemplateValue { get; set; } = "";
@@ -19,14 +24,18 @@
     [Parameter]
     public Action<string>? HtmlTemplateValueChanged { get; set; }
 
+    public TemplateSelector()
+    {
+        templates = GetTemplates();
+        hasTemplates = templates.Length > 0;
+    }
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        var files = GetTemplates();
-        if (files.Length > 0)
+        if (hasTemplates)
         {
-            selectedItem = Path.GetFileNameWithoutExtension(files[0]);
+            selectedItem = Path.GetFileNameWithoutExtension(templates[0]);
         }
     }
 

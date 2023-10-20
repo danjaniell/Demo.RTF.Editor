@@ -1,8 +1,7 @@
-using Application.Models;
-
-namespace Application.Services.Interface;
-
-public interface ITemplateBuilder
+namespace Application.Services.Interface
 {
-    string GenerateTemplate(string source, BillingDataModel model);
+    public interface ITemplateBuilder<TModel>
+    {
+        string GenerateTemplate(TModel model, string source);
+    }
 }

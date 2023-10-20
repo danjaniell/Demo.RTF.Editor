@@ -31,7 +31,6 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
-builder.Services.AddScoped<ITemplateBuilder, TemplateBuilder>();
 builder.Services.AddScoped<WkHtmlToPdfConversionStrategy>();
 builder.Services.AddScoped<PhantomJsPdfConversionStrategy>();
 builder.Services.AddScoped<WeasyPrintPdfConversionStrategy>();

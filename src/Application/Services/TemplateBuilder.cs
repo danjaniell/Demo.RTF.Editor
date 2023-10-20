@@ -1,16 +1,15 @@
-using Application.Models;
 using Application.Services.Interface;
 using HandlebarsDotNet;
 
-namespace Application.Services;
-
-public class TemplateBuilder : ITemplateBuilder
+namespace Application.Services
 {
-    public string GenerateTemplate(string source, BillingDataModel model)
+    public class TemplateBuilder<TModel> : ITemplateBuilder<TModel>
     {
-        var template = Handlebars.Compile(source);
-        var result = template(model);
-
-        return result;
+        public string GenerateTemplate(TModel model, string source)
+        {
+            var template = Handlebars.Compile(source);
+            var result = template(model);
+            return result;
+        }
     }
 }

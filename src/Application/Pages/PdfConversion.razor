@@ -1,6 +1,5 @@
 @using Application.Models
 @inject IServiceProvider _serviceProvider;
-@inject ITemplateBuilder _templateBuilder;
 
 <TemplateSelector HtmlTemplateValue="@HtmlValue" HtmlTemplateValueChanged="OnHtmlTemplateChange" />
 <RadzenCard>
@@ -24,19 +23,13 @@
 
     private async Task GeneratePdf()
     {
-        var model = CreateBillingDataModel();
-        var htmlValue = _templateBuilder.GenerateTemplate(HtmlValue,model);
-        pdfItem = await CreatePdfConverter(selectedStrategy).GeneratePdfFromHtmlAsync(htmlValue);
+        //Using a blank model
+        var templateBuilder = new TemplateBuilder<PlaceholderDataModel>();
+        string templateOutput = templateBuilder.GenerateTemplate(new PlaceholderDataModel(), HtmlValue);
+
+        pdfItem = await CreatePdfConverter(selectedStrategy).GeneratePdfFromHtmlAsync(templateOutput);
         string blobUrl = await GetBlobUrl(pdfItem.Bytes);
         await OpenPdfInNewTab(blobUrl);
-    }
-
-    private BillingDataModel CreateBillingDataModel()
-    {
-        return new BillingDataModel()
-        {
-            AccountNum = "618704888245",
-        };
     }
 
     private async Task OpenPdfInNewTab(string dataUri)

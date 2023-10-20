@@ -60,7 +60,6 @@
         [{ size: ["small", false, "large", "huge"] }], // custom dropdown
         [{ header: [1, 2, 3, 4, 5, 6, false] }],
         ["clean"], // remove formatting button
-        ["showHtml"],
       ];
 
       var handlers = {
@@ -127,9 +126,13 @@
       Block.blotName = "P";
       Quill.register(Block);
 
+      Quill.register("modules/htmlEditButton", htmlEditButton);
+
       quillEditor = new Quill("#toolbar", {
         modules: {
           toolbar: toolbarOptions,
+          clipboard: {},
+          htmlEditButton: {},
         },
         theme: "snow",
         placeholder: "Enter text here...",

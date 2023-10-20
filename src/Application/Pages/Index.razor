@@ -2,77 +2,71 @@
 @using Application.Pages
 <PageTitle>Home</PageTitle>
 
-<RadzenSplitButton Click=@OnClick Text="@buttonText" Icon="account_circle">
-    <ChildContent>
-        <RadzenSplitButtonItem Text="jodit" Value="1" />
-        <RadzenSplitButtonItem Text="CKEditor" Value="2" />
-        <RadzenSplitButtonItem Text="QuillJs" Value="3" />
-        <RadzenSplitButtonItem Text="Radzen HTMLEditor" Value="4" />
-        <RadzenSplitButtonItem Text="Blazorise RichTextEdit" Value="5" />
-    </ChildContent>
-</RadzenSplitButton>
-
-@if (selectedComponent == "1")
-{
-    <JoditEditor/>
-}
-@if (selectedComponent == "2")
-{
-    <CKEditor/>
-}
-@if (selectedComponent == "3")
-{
-    <QuillEditor/>
-}
-@if (selectedComponent == "4")
-{
-    <RadzenEditor/>
-}
-@if (selectedComponent == "5")
-{
-    <BlazoriseEditor />
-}
+<div class="rz-p-12">
+    <div class = "rz-text-align-center">
+        <RadzenSelectBar @bind-Value=@selectedComponent TValue="int" class="mb-5">
+            <Items>
+                @foreach (var dataItem in data)
+                {
+                    <RadzenSelectBarItem Text="@dataItem.Name" Value="@dataItem.Id" Disabled="@(dataItem.IsDisabled)" Visible="@(dataItem.IsVisible)"  />
+                }
+            </Items>
+        </RadzenSelectBar>
+    </div>
+    @if (selectedComponent == 1)
+    {
+        <JoditEditor/>
+    }
+    @if (selectedComponent == 2)
+    {
+        <CKEditor/>
+    }
+    @if (selectedComponent == 3)
+    {
+        <QuillEditor/>
+    }
+    @if (selectedComponent == 4)
+    {
+        <RadzenEditor/>
+    }
+    @if (selectedComponent == 5)
+    {
+        <BlazoriseEditor />
+    }
+</div>
 
 @code {
-    string selectedComponent = "0";
-    string buttonText = nameof(JoditEditor);
+    int selectedComponent = 0;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public class EditorMenuOptions
     {
-        if (firstRender)
-        {
-            UpdateButtonLabels("1");
-            await InvokeAsync(StateHasChanged);
-        }
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public bool IsDisabled { get; set; } = false;
+        public bool IsVisible { get; set; } = true;
     }
 
-    void OnClick(RadzenSplitButtonItem item)
+    IEnumerable<EditorMenuOptions> data = new EditorMenuOptions[]
     {
-        UpdateButtonLabels(item.Value);
-    }
-
-    void UpdateButtonLabels(string componentToShow)
-    {
-        selectedComponent = componentToShow;
-        if (componentToShow == "1")
-        {
-            buttonText = nameof(JoditEditor);
+        new EditorMenuOptions() {
+            Id = 1,
+            Name = "jodit"
+        },
+        new EditorMenuOptions() {
+            Id = 2,
+            Name = "CKEditor"
+        },
+        new EditorMenuOptions() {
+            Id = 3,
+            Name = "QuillJs"
+        },
+        new EditorMenuOptions() {
+            Id = 4,
+            Name = "Radzen HTMLEditor",
+        },
+        new EditorMenuOptions() {
+            Id = 5,
+            Name = "Blazorise RichTextEdit",
         }
-        else if (componentToShow == "2")
-        {
-            buttonText = nameof(CKEditor);
-        }
-        else if (componentToShow == "3")
-        {
-            buttonText = nameof(QuillEditor);
-        }
-        else if (componentToShow == "4")
-        {
-            buttonText = nameof(RadzenEditor);
-        }
-        else if (componentToShow == "5")
-        {
-            buttonText = nameof(BlazoriseEditor);
-        }
-    }
+    };
 }

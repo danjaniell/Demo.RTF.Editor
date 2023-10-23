@@ -27,9 +27,13 @@
     }
     @if (selectedComponent == 4)
     {
+        <PellEditor/>
+    }
+    @if (selectedComponent == 98)
+    {
         <RadzenEditor/>
     }
-    @if (selectedComponent == 5)
+    @if (selectedComponent == 99)
     {
         <BlazoriseEditor />
     }
@@ -62,10 +66,14 @@
         },
         new EditorMenuOptions() {
             Id = 4,
+            Name = "pell"
+        },
+        new EditorMenuOptions() {
+            Id = 98,
             Name = "Radzen HTMLEditor",
         },
         new EditorMenuOptions() {
-            Id = 5,
+            Id = 99,
             Name = "Blazorise RichTextEdit",
         }
     };

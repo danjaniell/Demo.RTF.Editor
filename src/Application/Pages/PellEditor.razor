@@ -1,0 +1,44 @@
+@page "/pell-editor"
+@inject IJSRuntime JSRuntime
+
+<RadzenCard>
+    <PdfConversion HtmlValue="@htmlValue" OnTemplateLoad="OnTemplateLoad"/>
+    <div id="editor" class="pell"></div>
+    <div>
+      HTML output:
+      <div id="html-output" style="white-space:pre-wrap;"></div>
+    </div>
+</RadzenCard>
+
+@code {
+    private string htmlValue = "<h1>Hello World!!!</h1>";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("PellFunctions.createEditor");
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        JSRuntime.InvokeVoidAsync("registerUpdateHtmlValueFunction", DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public void UpdateHtmlValue(string newValue)
+    {
+        htmlValue = newValue;
+        StateHasChanged();
+    }
+
+    private void OnTemplateLoad(string htmlTemplateValue)
+    {
+        JSRuntime.InvokeVoidAsync("PellFunctions.setTextValue", htmlTemplateValue);
+        htmlValue = htmlTemplateValue;
+        StateHasChanged();
+    }
+}

@@ -29,6 +29,10 @@
     {
         <PellEditor/>
     }
+    @if (selectedComponent == 5)
+    {
+        <FroalaEditor/>
+    }
     @if (selectedComponent == 98)
     {
         <RadzenEditor/>
@@ -67,6 +71,10 @@
         new EditorMenuOptions() {
             Id = 4,
             Name = "pell"
+        },
+        new EditorMenuOptions() {
+            Id = 5,
+            Name = "Froala"
         },
         new EditorMenuOptions() {
             Id = 98,

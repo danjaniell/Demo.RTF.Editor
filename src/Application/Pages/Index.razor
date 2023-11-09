@@ -4,85 +4,108 @@
 
 <div class="rz-p-12">
     <div class = "rz-text-align-center">
-        <RadzenSelectBar @bind-Value=@selectedComponent TValue="int" class="mb-5">
+        <RadzenSelectBar @bind-Value=@selectedComponent TValue="EditorType" class="mb-5">
             <Items>
                 @foreach (var dataItem in data)
                 {
-                    <RadzenSelectBarItem Text="@dataItem.Name" Value="@dataItem.Id" Disabled="@(dataItem.IsDisabled)" Visible="@(dataItem.IsVisible)"  />
+                    <RadzenSelectBarItem Text="@dataItem.Name" Value="@dataItem.Type" Disabled="@(dataItem.IsDisabled)" Visible="@(dataItem.IsVisible)"  />
                 }
             </Items>
         </RadzenSelectBar>
     </div>
-    @if (selectedComponent == 1)
+    @if (selectedComponent > 0)
     {
-        <JoditEditor/>
-    }
-    @if (selectedComponent == 2)
-    {
-        <CKEditor/>
-    }
-    @if (selectedComponent == 3)
-    {
-        <QuillEditor/>
-    }
-    @if (selectedComponent == 4)
-    {
-        <PellEditor/>
-    }
-    @if (selectedComponent == 5)
-    {
-        <FroalaEditor/>
-    }
-    @if (selectedComponent == 98)
-    {
-        <RadzenEditor/>
-    }
-    @if (selectedComponent == 99)
-    {
-        <BlazoriseEditor />
+        @data[(int)selectedComponent - 1].Component
     }
 </div>
 
 @code {
-    int selectedComponent = 0;
-
-    public class EditorMenuOptions
+    public enum EditorType
     {
-        public int Id { get; set; }
+        JoditEditor = 1,
+        CKEditor,
+        QuillEditor,
+        PellEditor,
+        FroalaEditor,
+        RadzenEditor,
+        BlazoriseEditor
+    }
+
+    EditorType selectedComponent = 0;
+
+    public class EditorOption
+    {
+        public EditorType Type { get; set; }
         public string? Name { get; set; }
+        public RenderFragment? Component { get; set; }
         public bool IsDisabled { get; set; } = false;
         public bool IsVisible { get; set; } = true;
     }
 
-    IEnumerable<EditorMenuOptions> data = new EditorMenuOptions[]
+    EditorOption[] data = new EditorOption[]
     {
-        new EditorMenuOptions() {
-            Id = 1,
-            Name = "jodit"
+        new EditorOption() {
+            Type = EditorType.JoditEditor,
+            Name = "jodit",
+            Component = builder =>
+            {
+                builder.OpenComponent<JoditEditor>(0);
+                builder.CloseComponent();
+            }
         },
-        new EditorMenuOptions() {
-            Id = 2,
-            Name = "CKEditor"
+        new EditorOption() {
+            Type = EditorType.CKEditor,
+            Name = "CKEditor",
+            Component = builder =>
+            {
+                builder.OpenComponent<CKEditor>(0);
+                builder.CloseComponent();
+            }
         },
-        new EditorMenuOptions() {
-            Id = 3,
-            Name = "QuillJs"
+        new EditorOption() {
+            Type = EditorType.QuillEditor,
+            Name = "QuillJs",
+            Component = builder =>
+            {
+                builder.OpenComponent<QuillEditor>(0);
+                builder.CloseComponent();
+            }
         },
-        new EditorMenuOptions() {
-            Id = 4,
-            Name = "pell"
+        new EditorOption() {
+            Type = EditorType.PellEditor,
+            Name = "pell",
+            Component = builder =>
+            {
+                builder.OpenComponent<PellEditor>(0);
+                builder.CloseComponent();
+            }
         },
-        new EditorMenuOptions() {
-            Id = 5,
-            Name = "Froala"
+        new EditorOption() {
+            Type = EditorType.FroalaEditor,
+            Name = "Froala",
+            Component = builder =>
+            {
+                builder.OpenComponent<FroalaEditor>(0);
+                builder.CloseComponent();
+            }
         },
-        new EditorMenuOptions() {
-            Id = 98,
+        new EditorOption() {
+            Type = EditorType.RadzenEditor,
             Name = "Radzen HTMLEditor",
+            Component = builder =>
+            {
+                builder.OpenComponent<RadzenEditor>(0);
+                builder.CloseComponent();
+            }
         },
-        new EditorMenuOptions() {
-            Id = 99,
+        new EditorOption() {
+            Type = EditorType.BlazoriseEditor,
             Name = "Blazorise RichTextEdit",
+            Component = builder =>
+            {
+                builder.OpenComponent<BlazoriseEditor>(0);
+                builder.CloseComponent();
+            }
         }
     };
 }

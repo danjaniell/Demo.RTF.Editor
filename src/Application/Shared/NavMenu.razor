@@ -21,13 +21,11 @@
 </Sidebar>
 
 @code{
-    Sidebar sidebar;
-    SidebarSubItem mailSidebarSubItems;
-    SidebarSubItem appsSidebarSubItems;
+    Sidebar? sidebar;
 
     void ToggleSidebar()
     {
-        sidebar.Toggle();
+        sidebar?.Toggle();
     }
 }
 

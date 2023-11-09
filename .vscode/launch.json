@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "UI",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/Application/bin/Debug/net7.0/Application.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Application",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart",
+            "console": "externalTerminal",
+            "launchBrowser": {
+                "enabled": false
+            }
+        },
+        {
+            "name": "Brave",
+            "type": "chrome",
+            "request": "launch",
+            "includeDefaultArgs": true,
+            "url": "https://localhost:5001",
+            "runtimeExecutable": "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
+            "cwd": "${workspaceFolder}/src/Application",
+            "webRoot": "${workspaceFolder}/wwwroot",
+            "preLaunchTask": "build sln",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Run Blazor on Brave",
+            "configurations": ["UI", "Brave"],
+            "preLaunchTask": "build sln",
+        }
+    ]
+}
